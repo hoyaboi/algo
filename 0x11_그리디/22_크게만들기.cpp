@@ -33,3 +33,5 @@ int main() {
         ans.pop();
     }
 }
+
+// https://www.acmicpc.net/problem/2812
