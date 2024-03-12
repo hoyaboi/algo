@@ -7,30 +7,30 @@ int main() {
 
     int n, k; cin >> n >> k;
     string str; cin >> str;
-    stack<int> num;
-    queue<int> ans;
-    for(int i = n-1; i >= 0; i--) num.push(str[i]-'0');
+    queue<int> num;
+    deque<int> ans;
+    for(char c : str) num.push(c-'0');
     int cnt = 0;
-    while(!num.empty()) {
-        if(cnt == k) break;
-        if(num.size() == 1) {
-            ans.push(num.top());
-            num.pop();
-            break;
+    while(!num.empty() && cnt < k) {
+        int a = num.front(); num.pop();
+        if(ans.empty()) {
+            ans.push_back(a);
+            continue;
         }
-        int a = num.top(); num.pop();
-        int b = num.top(); num.pop();
-        if(a >= b) ans.push(a);
-        else cnt++;
-        num.push(b);
+        while(!ans.empty() && ans.back() < a) {
+            ans.pop_back();
+            if(++cnt == k) break;
+        }
+        ans.push_back(a);
     }
     while(!num.empty()) {
-        ans.push(num.top());
+        ans.push_back(num.front());
         num.pop();
     }
-    while(!ans.empty()) {
+    while(!ans.empty() && n-k > 0) {
         cout << ans.front();
-        ans.pop();
+        ans.pop_front();
+        n--;
     }
 }
 
