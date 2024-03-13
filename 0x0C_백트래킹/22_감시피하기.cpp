@@ -23,15 +23,17 @@ int main() {
     else cout << "NO";
 }
 void back(int k, int start) {
+    if(escape) return;
     if(k == 3) {
         vector<pii> cur;
         for(int i = 0; i < k; i++) {
             int x = nxt[i] / n;
             int y = nxt[i] % n;
+            if(board[x][y] == 'S' || board[x][y] == 'T') return;
             cur.push_back({x, y});
-            if(isPos(cur)) escape = true;
-            return;
         }
+        if(isPos(cur)) escape = true;
+        return;
     }
     for(int i = start; i < n*n; i++) {
         nxt[k] = i;
@@ -41,37 +43,28 @@ void back(int k, int start) {
 bool isPos(vector<pii> cur) {
     queue<pii> que;
     char tmp[10][10];
+    memcpy(tmp, board, sizeof(board));
+    for(auto& p : cur) tmp[p.first][p.second] = 'O';
+    
     for(int i = 0; i < n; i++)
-        for(int j = 0; j < n; j++) {
-            tmp[i][j] = board[i][j];
-            for(int k = 0; k < cur.size(); k++) {
-                int x, y; tie(x, y) = cur[k];
-                if(i == x && j == y) tmp[i][j] = 'O';
-            }
-            if(tmp[i][j] == 'S') que.push({i, j});
-        }
-    bool pos = true;
+        for(int j = 0; j < n; j++) 
+            if(tmp[i][j] == 'T') que.push({i, j});
+    
     while(!que.empty()) {
-        if(!pos) break;
-        pii std = que.front(); que.pop();
-        for(int i = std.first-1; i >= 0; i--) {
-            if(tmp[i][std.second] == 'O') break;
-            if(tmp[i][std.second] == 'T') pos = false;
-        }
-        for(int i = std.first+1; i < n; i++) {
-            if(tmp[i][std.second] == 'O') break;
-            if(tmp[i][std.second] == 'T') pos = false;
-        }
-        for(int i = std.second-1; i >= 0; i--) {
-            if(tmp[std.first][i] == 'O') break;
-            if(tmp[std.first][i] == 'T') pos = false;
-        }
-        for(int i = std.second+1; i < n; i++) {
-            if(tmp[std.first][i] == 'O') break;
-            if(tmp[std.first][i] == 'T') pos = false;
+        pii teacher = que.front(); que.pop();
+        int directions[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        for(auto& dir : directions) {
+            int x = teacher.first, y = teacher.second;
+            while(true) {
+                x += dir[0];
+                y += dir[1];
+                if(x < 0 || x >= n || y < 0 || y >= n || tmp[x][y] == 'O') break;
+                if(tmp[x][y] == 'S') return false;
+            }
         }
     }
-    return pos;
+    return true;
 }
+
 
 // https://www.acmicpc.net/problem/18428
