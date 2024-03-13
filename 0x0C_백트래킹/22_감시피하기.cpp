@@ -66,5 +66,4 @@ bool isPos(vector<pii> cur) {
     return true;
 }
 
-
 // https://www.acmicpc.net/problem/18428
