@@ -24,4 +24,5 @@ void func(int k) {
     for (int i = 0; i < k / 3; i++) cout << " ";
     func(k / 3);
 }
+
 // https://www.acmicpc.net/problem/4779
