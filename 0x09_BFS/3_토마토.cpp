@@ -4,26 +4,19 @@ using namespace std;
 #define Y second
 
 int board[1002][1002];
-int vis[1002][1002];
+int dx[4] = {1, 0, -1, 0};
+int dy[4] = {0, 1, 0, -1};
 
 int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
+    cin.tie(0)->sync_with_stdio(0);
 
-    int n, m; cin >> m >> n;
-    int dx[4] = {1, 0, -1, 0};
-    int dy[4] = {0, 1, 0, -1};
+    int m, n; cin >> m >> n;
     queue<pair<int, int>> que;
-    int count = 0;
-
+    
     for(int i = 0; i < n; i++)
         for(int j = 0; j < m; j++) {
             cin >> board[i][j];
-            if(board[i][j] == 1) {
-                vis[i][j] = 1;
-                que.push({i, j});
-            }
-            if(board[i][j] == -1) vis[i][j] = -1;
+            if(board[i][j] == 1) que.push({i, j});
         }
 
     while(!que.empty()) {
@@ -32,24 +25,24 @@ int main() {
             int nx = cur.X + dx[dir];
             int ny = cur.Y + dy[dir];
             if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-            if(vis[nx][ny] > 0 || board[nx][ny] != 0) continue;
-            vis[nx][ny] = vis[cur.X][cur.Y] + 1;
+            if(board[nx][ny]) continue;
+            board[nx][ny] = board[cur.X][cur.Y] + 1;
             que.push({nx, ny});
         }
     }
 
-    bool isSame = true;
-    for(int i = 0; i < n; i++) 
+    int day = 0;
+    for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
-            if(vis[i][j] == 0) {
+            if(!board[i][j]) {
                 cout << -1;
                 return 0;
             }
-            else if(board[i][j] != vis[i][j]) isSame = false;
-            if(count < vis[i][j]) count = vis[i][j];
+            day = max(board[i][j], day);
         }
-    if(!isSame) cout << count-1;
-    else cout << 0;
-}   
+    }
+    if(day == 1) cout << 0;
+    else cout << day-1;
+}
 
 // https://www.acmicpc.net/problem/7576

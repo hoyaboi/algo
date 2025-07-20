@@ -6,10 +6,12 @@ int main() {
     cin.tie(0);
 
     int arr[4] = {1, 2, 3};
-    
-    int M = max({arr[0], arr[1], arr[2]});
-    cout << M << "\n";
 
-    M = *max_element(arr, arr + 3);
+    int M1 = max(arr[0], arr[1]);
+    int M2 = max({arr[0], arr[1], arr[2]});
+    cout << M1 << "\n";
+    cout << M2 << "\n";
+
+    int M = *max_element(arr, arr + 3);
     cout << M << "\n";
 }
